@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LinkController::class, 'index'])->name('home');
+Route::get('/add-urls', [LinkController::class, 'add'])->name('addUrl');
+
+Route::post('/save-urls', [LinkController::class, 'saveLinks'])->name('saveUrls');
