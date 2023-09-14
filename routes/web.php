@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LinkController::class, 'index'])->name('home');
 Route::get('/add-urls', [LinkController::class, 'add'])->name('addUrl');
+Route::get('/domain/{id}', [LinkController::class, 'show'])->name('showDomain');

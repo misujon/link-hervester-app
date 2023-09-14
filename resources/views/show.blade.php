@@ -44,15 +44,13 @@
 
         {{-- Domains Container Table --}}
         <section class="container mt-5">
-            <h3 class="mb-5">Home - (domains)</h3>
+            <h3 class="mb-5">Links of domain - {{ $domain->domain_name }}</h3>
             <table class="table table-bordered" id="domains-table">
                 <thead class="table-dark">
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Domain Name</th>
-                    <th scope="col">Available Links</th>
+                    <th scope="col">Url</th>
                     <th scope="col">Created At</th>
-                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -81,10 +79,8 @@
                 responsive: !0,
                 columns: [
                     { data: 'id' },
-                    { data: 'domain_name' },
-                    { data: 'link_count' },
+                    { data: 'url' },
                     { data: 'created_at' },
-                    { data: 'actions', searchable: false}
                 ],
                 language: {
                     "paginate": {

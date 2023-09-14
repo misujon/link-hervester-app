@@ -42,18 +42,16 @@
         {{-- Url Adding process --}}
         <section class="container mt-5">
             <h3>Add Urls</h3>
-            <div x-data="{ formData: { urls: '' }, responseMessage: '' }">
+            <div x-data="{ formData: { urls: '' }, responseMessage: '', showMessage: false }">
                 <form @submit.prevent="submitForm(formData)">
                     <div class="mb-3">
-                        <textarea class="form-control" rows="15" name="urls" x-model="formData.urls" placeholder="Enter URLs, Example: https://example.com/"></textarea>
+                        <textarea class="form-control" rows="15" name="urls" x-model="formData.urls" placeholder="Enter URLs, Example: https://example.com/" required></textarea>
                         <small>Each line will be regarded as a single URL...</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Save <i class="bi bi-save-fill"></i></button>
                 </form>
             
-                <div x-show="responseMessage">
-                    <p x-text="responseMessage"></p>
-                </div>
+                <p id="showMessage" class="mt-5"></p>
             </div>
         </section>
         
@@ -73,22 +71,22 @@
                     },
                 })
                 .then(response => {
-                    if (!response.ok) {
+                    if (!response.ok) 
+                    {
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
                     // Handle the success response here
-                    if (data.success) {
-                        // Clear the form and show a success message
-                        formData.urls = '';
-                        Alpine.store('responseMessage', 'Data saved successfully.');
+                    if (data.status === 'success') {
+                        formData.urls = ''; // Clear the form
                     }
+                    document.getElementById('showMessage').innerHTML = data.message;
                 })
                 .catch(error => {
                     // Handle fetch or server-side errors here
-                    Alpine.store('responseMessage', 'Error: ' + error.message);
+                    document.getElementById('showMessage').innerHTML = data.message;
                 });
             }
 

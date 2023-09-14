@@ -1,0 +1,17 @@
+.paginate_button.current{
+    display: inline-block;
+    color: #fff;
+    background-color: #0a58ca;
+    border-color: #0d6efd;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.paginate_button{
+    display: inline-block;
+    color: #0a58ca;
+    background-color: #fff;
+    border-color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}

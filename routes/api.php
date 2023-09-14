@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/save-urls', [LinkController::class, 'saveLinks'])->name('saveUrls');
+Route::get('/fetch-domains', [LinkController::class, 'fetchDomains'])->name('fetchDomains');
+Route::get('/fetch-links/{domain}', [LinkController::class, 'fetchLinks'])->name('fetchLinks');

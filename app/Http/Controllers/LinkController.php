@@ -4,19 +4,61 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveLinksRequest;
 use App\Jobs\UrlProcessJob;
+use App\Models\Domain;
+use App\Models\Link;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 
 class LinkController extends Controller
 {
     public function index()
     {
-        return view('home');
+        $dataUrl = route('fetchDomains');
+        return view('home', compact('dataUrl'));
+    }
+
+    public function fetchDomains(Request $request)
+    {
+        $domains = Domain::leftJoin('links', 'domains.id', '=', 'links.domain_id')
+                            ->select('domains.*', DB::raw('count(links.id) as link_count'))
+                            ->groupBy('domains.id', 'domains.domain_name', 'domains.created_at', 'domains.updated_at');
+
+        $datatable = DataTables::of($domains);
+        $datatable->editColumn('actions', function($query){
+            return "<a class='btn btn-primary btn-sm' href='".route('showDomain', $query->id)."'>Domain Links</a>";
+        })
+        ->filterColumn('link_count', function($query, $keyword){
+            if ($keyword)
+            {
+                $query->having('link_count', 'like', '%' . $keyword . '%');
+            }
+        })
+        ->rawColumns(['actions']);
+
+        return $datatable->toJson();
     }
 
     public function add() 
     {
         return view('add');
+    }
+
+    public function show($domain) 
+    {
+        $domain = Domain::find($domain);
+        $dataUrl = route('fetchLinks', $domain->id);
+        return view('show', compact('dataUrl', 'domain'));
+    }
+
+    public function fetchLinks($domain, Request $request)
+    {
+        $links = Link::where('domain_id', $domain);
+
+        $datatable = DataTables::of($links);
+        return $datatable->toJson();
     }
 
     public function saveLinks(SaveLinksRequest $request)
