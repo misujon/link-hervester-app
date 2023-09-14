@@ -33,6 +33,7 @@ class UrlProcessJob implements ShouldQueue
      */
     public function handle(): void
     {
+        // Service that stores domains uniquely and store the urls uniquely to the relational table.
         $this->urlService->saveUrls($this->urls);
         return; 
     }

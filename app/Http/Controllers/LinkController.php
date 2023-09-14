@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveLinksRequest;
 use App\Jobs\UrlProcessJob;
-use App\Services\UrlService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 
@@ -28,6 +26,7 @@ class LinkController extends Controller
             $invalids = [];
             $urls = collect(explode(PHP_EOL, $request->urls))->filter(function($value) use(&$invalids){
 
+                // Validating urls, if those are valid structured.
                 if (!filter_var($value, FILTER_VALIDATE_URL))
                 {
                     $invalids[] = $value;
@@ -35,8 +34,9 @@ class LinkController extends Controller
                 }
                 return true;
 
-            })->chunk(1000);
+            })->chunk(1000); // Chunk data of 1000 size.
 
+            // Batch initiated and dispatch jobs through batch.
             $batch = Bus::batch([]);
             foreach ($urls as $url)
             {

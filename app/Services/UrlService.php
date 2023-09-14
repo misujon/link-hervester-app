@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class UrlService
 {
+    // Method that pull the domain name only from the url.
     public function getDomain($url)
     {
         $pieces = parse_url($url);
@@ -31,6 +32,7 @@ class UrlService
             {
                 try
                 {
+                    // Formatting data for bulk insert into Domains table.
                     $host = $this->getDomain($url);
                     $domainData[] = ['domain_name' => $host];
                     $uniqueDomains[] = $host;
@@ -42,6 +44,7 @@ class UrlService
                 }
             }
             
+            // Upserting the bulk domains, which inserts the domains and if there's existing one, then updates it.
             Domain::upsert($domainData, ['domain_name'], ['domain_name']);
             $getDomains = Domain::whereIn('domain_name', array_unique($uniqueDomains))->get();
 
@@ -54,6 +57,7 @@ class UrlService
                     $getChunkedUrls = [];
                     foreach ($urls as $data) 
                     {
+                        // Formatting urls with the related domain id.
                         $parsedUrl = $this->getDomain($data);
                         if (isset($parsedUrl) && $parsedUrl == $dom->domain_name) 
                         {
@@ -64,6 +68,7 @@ class UrlService
                         }
                     }
 
+                    // Keeping all the links data here to insert bulk.
                     $linkData = array_merge($getChunkedUrls, $linkData);
                 }
                 catch(\Exception $e)
@@ -73,6 +78,7 @@ class UrlService
                 }
             }
     
+            // Bulk inserting the links with the formatted data.
             $insertLinks = Link::upsert($linkData, ['url'], ['domain_id']);
             Log::info("Total upsert: ".$insertLinks);
             
