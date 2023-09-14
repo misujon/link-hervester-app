@@ -11,12 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class LinkController extends Controller
 {
-    private $urlService;
-    public function __construct(UrlService $service)
-    {
-        $this->urlService = $service;
-    }
-
     public function index()
     {
         return view('home');
@@ -41,19 +35,18 @@ class LinkController extends Controller
                 }
                 return true;
 
-            })->chunk(2);
+            })->chunk(1000);
 
-            // $batch = Bus::batch([])->dispatch();
+            $batch = Bus::batch([]);
             foreach ($urls as $url)
             {
-                $this->urlService->saveUrls($url->toArray());
-                // $batch->add(new UrlProcessJob($url->toArray()));
+                $batch->add(new UrlProcessJob($url->toArray()));
             }
     
             return response()->json([
                 'status' => 'success',
                 'message' => 'Successfully stored urls.',
-                // 'data' => $batch,
+                'data' => $batch->dispatch(),
                 'invalid_urls' =>  $invalids
             ], 200);
         }

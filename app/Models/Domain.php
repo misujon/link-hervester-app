@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Link;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Domain extends Model
 {
@@ -12,4 +13,14 @@ class Domain extends Model
     protected $fillable = [
         'domain_name'
     ];
+
+    public function links()
+    {
+        return $this->hasMany(Link::class, 'domain_id');
+    }
+
+    public function linkCount()
+    {
+        return $this->hasMany(Link::class, 'domain_id')->count();
+    }
 }

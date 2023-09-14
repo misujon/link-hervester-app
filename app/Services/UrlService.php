@@ -41,32 +41,30 @@ class UrlService
                     continue;
                 }
             }
-    
-            $insertDomain = Domain::upsert($domainData, ['domain_name'], ['domain_name']);
-            if (!$insertDomain) return false;
             
+            Domain::upsert($domainData, ['domain_name'], ['domain_name']);
             $getDomains = Domain::whereIn('domain_name', array_unique($uniqueDomains))->get();
+
+            Log::info("Get domains upsert: ".count($domainData));
             $linkData = [];
             foreach ($getDomains as $dom)
             {
                 try
                 {
-                    $checker = $this;
-                    collect($urls)->map(function($data) use (&$linkData, $dom, $checker){
-                        $parsedUrl = $checker->getDomain($data);
-                        if (isset($parsedUrl) && $parsedUrl == $dom->domain_name)
+                    $getChunkedUrls = [];
+                    foreach ($urls as $data) 
+                    {
+                        $parsedUrl = $this->getDomain($data);
+                        if (isset($parsedUrl) && $parsedUrl == $dom->domain_name) 
                         {
-                            $linkData[] = [
+                            $getChunkedUrls[] = [
                                 'domain_id' => $dom->id,
                                 'url' => $data
                             ];
-                            return true;
                         }
-                        else
-                        {
-                            return false;
-                        }
-                    });
+                    }
+
+                    $linkData = array_merge($getChunkedUrls, $linkData);
                 }
                 catch(\Exception $e)
                 {
@@ -75,8 +73,8 @@ class UrlService
                 }
             }
     
-            $insertLinks = Link::upsert($linkData, ['url'], ['url']);
-            if (!$insertLinks) return false;
+            $insertLinks = Link::upsert($linkData, ['url'], ['domain_id']);
+            Log::info("Total upsert: ".$insertLinks);
             
             return true;
         }
