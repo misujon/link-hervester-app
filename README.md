@@ -1,66 +1,106 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+## About Link Harvester Project
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Link Harvester is a simple app which collects links from users. Any user can submit links which are validated and stored by the application. Users can see the submitted (links/domains) and search, sort those data. The results are displayed in a paginated table.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Technologies used for the development
+Here's the required technologies are used for the project
+- PHP v8.2
+- Laravel v10
+- Alpine Js v3.x
+- jQuery v3.7
+- Bootstrap v5
+- jQuery Datatable v1.36
+---
+**The running environment tools or libs**
+- Docker v4.2
+- Supervisor v4.x
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation Process
+###Prerequisites 
+Before you begin, ensure you have the following prerequisites installed on your system:
+[Docker](https://www.docker.com/ "Docker")
+[Docker Compose](https://docs.docker.com/compose/ "Docker Compose")
+Git (Optional for cloning the repository)
 
-## Learning Laravel
+###Clone the Repository
+If you haven't already, you can clone this repository using Git:
+- `git clone https://github.com/misujon/link-hervester-app.git`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- `cd link-hervester-app`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+###Docker Setup
+This project uses Docker for easy setup. Follow these steps to get the application up and running:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Build the Docker containers:
+- `docker-compose build`
 
-## Laravel Sponsors
+- `docker-compose up -d`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+###Setting Up Supervisor for Laravel Workers
+Laravel provides a powerful job processing system called "queues," which can be managed using Supervisor. Here's how to set up Supervisor for Laravel workers within the Docker environment:
 
-### Premium Partners
+Enter the workspace container:
+- `docker-compose exec app bash`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Copy the laravel-worker.conf file to the Supervisor config folder:
+- `cp /var/www/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf`
 
-## Contributing
+Now if there's no supervisor installed follow those steps otherwise skip.
+- `apt-get update`
+- `apt-get install -y supervisor`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Instruct Supervisor to read and update its configuration to include the new .**conf** file:
+- `supervisorctl reread`
+- `supervisorctl update`
 
-## Code of Conduct
+Start the Laravel worker process
+- `supervisorctl start laravel-worker:*`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+That's it! Supervisor is now set up to manage your Laravel worker processes.
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+###Project Starting Point
+After successfully installing the project now the project can be accessible here on **8000** port with **localhost**
+- `http://localhost:800`
 
-## License
+For more easier to access database here's the adminer package also included. To check the database need to go here.
+- `http://localhost:8080`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Here's the default DB credentials. Those can be changeable as per the configuration.
+- `username: root`
+- `password: mysecretpassword`
+
+
+##Project Workflow
+1. On home page all the domains are fetch through datatable with the soring and searching options. Here all the domains will be showing with the **Domain links** button. For each domain has some links stored to the links table and how many links are there it also mentioned into the table as **Available Links**
+![](https://i.ibb.co/xzv32yB/Screenshot-2023-09-15-at-4-38-08-PM.png)
+
+2. There's another page called Add Urls. where an user can add their links. The adding process are based on some criterias are,
+![](https://i.ibb.co/zQg0ZCv/Screenshot-2023-09-15-at-4-50-21-PM.png)
+- After submitting the urls first it seperated all the links domains and filter them and keep the unique domains only. 
+- Now by linking the domain id all the links are chunked with the particular domain.
+- And after processing those insert all the domains and links in a bulk inserting process.
+- All those process are completing through the laravel batch jobs feature where all the links data chunked as 1000 records and executes them to the batch.
+- With this process those all the inserting operation is gone to the job queue and the queue has been executed through supervisor and the data are saving throughuly.
+
+3. And finally those links are stored based on their domain. Those can be accessible here. where I fetched the links of domain: **www.sample.com**
+![](https://i.ibb.co/xM8kXmQ/Screenshot-2023-09-15-at-4-52-35-PM.png)
+
+***Note: I've stored the domain and subdomains as a single domain, it also can be sorted as only domain.***
+
+##Additional Information
+For more information on Laravel and Docker, please refer to the official documentation:
+
+- [Laravel Documentation](https://laravel.com/docs "Laravel Documentation")
+- [Docker Documentation](https://docs.docker.com/ "Docker Documentation")
+
+This README should provide clear instructions for cloning, installing, and configuring your Laravel application with Docker and Supervisor. Make sure to keep your Laravel-worker.conf file up-to-date and refer to Supervisor's documentation for advanced configuration options.
+
+##Developer Contact
+Feel free to ask me anything about the project or if there's having any issue. Here's I'm available with **whatsapp/telegram**
+###+8801676707067
+
+###Thank you
