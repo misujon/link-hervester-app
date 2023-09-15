@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('links', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('domain_id');
-            $table->text('url')->unique();
+            $table->text('url');
             $table->timestamps();
 
             $table->foreign('domain_id')->on('domains')->references('id')->onDelete('cascade');
