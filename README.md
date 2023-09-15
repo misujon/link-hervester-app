@@ -19,11 +19,13 @@ Here's the required technologies are used for the project
 - Supervisor v4.x
 
 ## Installation Process
+
 ###Prerequisites 
 Before you begin, ensure you have the following prerequisites installed on your system:
 [Docker](https://www.docker.com/ "Docker")
 [Docker Compose](https://docs.docker.com/compose/ "Docker Compose")
 Git (Optional for cloning the repository)
+
 
 ###Clone the Repository
 If you haven't already, you can clone this repository using Git:
@@ -31,7 +33,9 @@ If you haven't already, you can clone this repository using Git:
 
 - `cd link-hervester-app`
 
+
 ###Docker Setup
+
 This project uses Docker for easy setup. Follow these steps to get the application up and running:
 
 Build the Docker containers:
@@ -39,7 +43,9 @@ Build the Docker containers:
 
 - `docker-compose up -d`
 
+
 ###Setting Up Supervisor for Laravel Workers
+
 Laravel provides a powerful job processing system called "queues," which can be managed using Supervisor. Here's how to set up Supervisor for Laravel workers within the Docker environment:
 
 Enter the workspace container:
@@ -63,6 +69,7 @@ That's it! Supervisor is now set up to manage your Laravel worker processes.
 
 
 ###Project Starting Point
+
 After successfully installing the project now the project can be accessible here on **8000** port with **localhost**
 - `http://localhost:800`
 
@@ -75,6 +82,7 @@ Here's the default DB credentials. Those can be changeable as per the configurat
 
 
 ##Project Workflow
+
 1. On home page all the domains are fetch through datatable with the soring and searching options. Here all the domains will be showing with the **Domain links** button. For each domain has some links stored to the links table and how many links are there it also mentioned into the table as **Available Links**
 ![](https://i.ibb.co/xzv32yB/Screenshot-2023-09-15-at-4-38-08-PM.png)
 
@@ -91,7 +99,9 @@ Here's the default DB credentials. Those can be changeable as per the configurat
 
 ***Note: I've stored the domain and subdomains as a single domain, it also can be sorted as only domain.***
 
+
 ##Additional Information
+
 For more information on Laravel and Docker, please refer to the official documentation:
 
 - [Laravel Documentation](https://laravel.com/docs "Laravel Documentation")
@@ -99,8 +109,12 @@ For more information on Laravel and Docker, please refer to the official documen
 
 This README should provide clear instructions for cloning, installing, and configuring your Laravel application with Docker and Supervisor. Make sure to keep your Laravel-worker.conf file up-to-date and refer to Supervisor's documentation for advanced configuration options.
 
+
 ##Developer Contact
+
 Feel free to ask me anything about the project or if there's having any issue. Here's I'm available with **whatsapp/telegram**
+
 ###+8801676707067
+
 
 ###Thank you
